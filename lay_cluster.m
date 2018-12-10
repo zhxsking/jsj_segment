@@ -16,7 +16,7 @@ figure,imshow(img);
 %% 
 hsi = rgb2hsi(img);
 lab = rgb2lab(img);
-img_gray = rgb2gray(img);%Â»Ã’Â¶ÃˆÂ»Â¯
+img_gray = rgb2gray(img);%?¨°?¨¨?¡¥
 
 [m, n, k] = size(img);
 % position = ones(m*n, 2);

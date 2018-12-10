@@ -1,46 +1,46 @@
-% æ ¡æ­£S3å¤šå…‰è°±ç›¸æœºé¢„å¤„ç†åçš„å›¾åƒï¼Œå…ˆé€‰æ‹©å®šæ ‡æ¿å›¾åƒï¼Œåé€‰æ‹©å¾…å¤„ç†å›¾åƒï¼Œ
-% é¼ æ ‡é€‰æ‹©å®šæ ‡æ¿ç™½æ¿éƒ¨åˆ†ï¼Œå³è‡ªåŠ¨æ ¡æ­£ä¿å­˜ä¸ºgeotiffå›¾åƒ
+% Ğ£ÕıS3¶à¹âÆ×Ïà»úÔ¤´¦ÀíºóµÄÍ¼Ïñ£¬ÏÈÑ¡Ôñ¶¨±ê°åÍ¼Ïñ£¬ºóÑ¡Ôñ´ı´¦ÀíÍ¼Ïñ£¬
+% Êó±êÑ¡Ôñ¶¨±ê°å°×°å²¿·Ö£¬¼´×Ô¶¯Ğ£Õı±£´æÎªgeotiffÍ¼Ïñ
 clc;clear;
 close all;
-% é€‰æ‹©åŸºå‡†å›¾ç‰‡
-[bg_file, bg_path] = uigetfile({'*.jpg; *.png; *.gif; *.tif';'*.*'},'é€‰æ‹©åŸºå‡†å›¾ç‰‡');
+% Ñ¡Ôñ»ù×¼Í¼Æ¬
+[bg_file, bg_path] = uigetfile({'*.jpg; *.png; *.gif; *.tif';'*.*'},'Ñ¡Ôñ»ù×¼Í¼Æ¬');
 if isequal(bg_file,0)||isequal(bg_path,0)
-    msgbox('åŸºå‡†å›¾æœªé€‰æ‹©', 'warn' ,'help');
+    msgbox('»ù×¼Í¼Î´Ñ¡Ôñ', 'warn' ,'help');
     return;
 end
-img_cali = imread([bg_path,bg_file]); % åŸºå‡†å›¾ç‰‡
-% é€‰æ‹©å¾…å¤„ç†å›¾ç‰‡
-[file, path] = uigetfile({'*.jpg; *.png; *.gif; *.tif';'*.*'},'é€‰æ‹©å¾…å¤„ç†å›¾ç‰‡',bg_path);
+img_cali = imread([bg_path,bg_file]); % »ù×¼Í¼Æ¬
+% Ñ¡Ôñ´ı´¦ÀíÍ¼Æ¬
+[file, path] = uigetfile({'*.jpg; *.png; *.gif; *.tif';'*.*'},'Ñ¡Ôñ´ı´¦ÀíÍ¼Æ¬',bg_path);
 if isequal(file,0)||isequal(path,0)
-    msgbox('å¾…å¤„ç†å›¾æœªé€‰æ‹©', 'warn' ,'help');
+    msgbox('´ı´¦ÀíÍ¼Î´Ñ¡Ôñ', 'warn' ,'help');
     return;
 end
 
-% é€‰æ‹©ç™½æ¿åŒºåŸŸ
+% Ñ¡Ôñ°×°åÇøÓò
 figure,imshow(img_cali)
 rect = getrect;
 roi = imcrop(img_cali, rect);
 figure,imshow(roi)
-% æ±‚åŸºå‡†è®¡ç®—ç›¸å¯¹åå°„ç‡
+% Çó»ù×¼¼ÆËãÏà¶Ô·´ÉäÂÊ
 tic;
 param = mean(mean(roi));
-% å¸¦åœ°ç†ä¿¡æ¯è¯»å–å¾…å¤„ç†tiffå›¾åƒ
+% ´øµØÀíĞÅÏ¢¶ÁÈ¡´ı´¦ÀítiffÍ¼Ïñ
 [tiff, R] = geotiffread([path,file]);
 info = geotiffinfo([path,file]);
-% åˆ†å—å¤„ç†
+% ·Ö¿é´¦Àí
 [~,name,~] = fileparts(file);
 tiff_out = blockproc(tiff, [1024 1024], @(img)calc(img, param));
-% ä¿å­˜ä¸ºgeotiffæ–‡ä»¶
+% ±£´æÎªgeotiffÎÄ¼ş
 tiffTags = struct('TileLength',1024,'TileWidth',1024,'Compression','LZW');
 geotiffwrite([path,name,'-cali.tif'], tiff_out, R,...
     'GeoKeyDirectoryTag', info.GeoTIFFTags.GeoKeyDirectoryTag,...
     'TiffTags',tiffTags)
-% æ˜¾ç¤ºç»“æœ
+% ÏÔÊ¾½á¹û
 res = imread([path,name,'-cali.tif']);
 figure,imshow(res);
 toc;
 
-% æ ‡å®šå¤„ç†å‡½æ•°
+% ±ê¶¨´¦Àíº¯Êı
 function res = calc(img, param)
 img = img.data;
 if (size(img, 3) == 4)

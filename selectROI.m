@@ -1,61 +1,61 @@
-% æ‰‹åŠ¨é€‰å–roiåŒºåŸŸä½œä¸ºè®­ç»ƒé›†
+% ÊÖ¶¯Ñ¡È¡roiÇøÓò×÷ÎªÑµÁ·¼¯
 close all;
 clear;
 clc;
 picName = 'res';
 img = imread([picName,'.jpg']);
-roiFileName = ['roi_',picName]; % ROIæ–‡ä»¶å
+roiFileName = ['roi_',picName]; % ROIÎÄ¼şÃû
 
 figure;imshow(img);
-% æ·»åŠ ä¸€ä¸ªç»“æŸæŒ‰é”®
-btn = uicontrol('Style', 'pushbutton', 'String', 'ç»“æŸ',...
+% Ìí¼ÓÒ»¸ö½áÊø°´¼ü
+btn = uicontrol('Style', 'pushbutton', 'String', '½áÊø',...
     'Position', [20 20 50 20], 'Callback', @btn_down);
 global flag
 
 flag = 0;
-msgbox('å–å€’ä¼','ä¸€','help');
-roi1 = []; %ä¿å­˜ç¬¬ä¸€ç±»roi
-cnt = 0; %è®¡æ•°
+msgbox('È¡µ¹·ü','Ò»','help');
+roi1 = []; %±£´æµÚÒ»Ààroi
+cnt = 0; %¼ÆÊı
 pause;
 while ~flag
     cnt = cnt + 1;
-    disp(['ç¬¬',num2str(cnt),'ä¸ª']);
+    disp(['µÚ',num2str(cnt),'¸ö']);
     rect = floor(getrect());
-    rectangle('position', rect, 'EdgeColor', 'y', 'LineWidth',1); %ç”»å‡ºçŸ©å½¢æ¡†
+    rectangle('position', rect, 'EdgeColor', 'y', 'LineWidth',1); %»­³ö¾ØĞÎ¿ò
     roi1 = [roi1; rect];
     pause;
 end
 
 flag = 0;
-msgbox('å–æ­£å¸¸','äºŒ','help');
-roi2 = []; %ä¿å­˜ç¬¬äºŒç±»roi
-cnt = 0; %è®¡æ•°
+msgbox('È¡Õı³£','¶ş','help');
+roi2 = []; %±£´æµÚ¶şÀàroi
+cnt = 0; %¼ÆÊı
 pause;
 while ~flag
     cnt = cnt + 1;
-    disp(['ç¬¬',num2str(cnt),'ä¸ª']);
+    disp(['µÚ',num2str(cnt),'¸ö']);
     rect = floor(getrect());
-    rectangle('position', rect, 'EdgeColor', 'b', 'LineWidth',1); %ç”»å‡ºçŸ©å½¢æ¡†
+    rectangle('position', rect, 'EdgeColor', 'b', 'LineWidth',1); %»­³ö¾ØĞÎ¿ò
     roi2 = [roi2; rect];
     pause;
 end
 
 eval(['save ', roiFileName, ' roi1 roi2'])
 
-% æ˜¾ç¤ºROIç»“æœ
+% ÏÔÊ¾ROI½á¹û
 % eval(['load ', roiFileName]);
 % % load roi_1
 % figure;imshow(img);
 % for i=1:size(roi1,1)
-%     rectangle('position', roi1(i,:), 'EdgeColor', 'y', 'LineWidth',1); %ç”»å‡ºçŸ©å½¢æ¡†
+%     rectangle('position', roi1(i,:), 'EdgeColor', 'y', 'LineWidth',1); %»­³ö¾ØĞÎ¿ò
 % end
 % for i=1:size(roi2,1)
-%     rectangle('position', roi2(i,:), 'EdgeColor', 'b', 'LineWidth',1); %ç”»å‡ºçŸ©å½¢æ¡†
+%     rectangle('position', roi2(i,:), 'EdgeColor', 'b', 'LineWidth',1); %»­³ö¾ØĞÎ¿ò
 % end
 
-% æŒ‰é”®å“åº”å‡½æ•°
+% °´¼üÏìÓ¦º¯Êı
 function btn_down(source,event)
     global flag
     flag = source.Value;
-    disp('å‡†å¤‡ç»“æŸ');
+    disp('×¼±¸½áÊø');
 end

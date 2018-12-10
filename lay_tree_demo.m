@@ -5,7 +5,7 @@ clc;
 picName = 'res';
 img = imread([picName,'.jpg']);
 scale = 0.25;
-img = imresize(img, scale); % ç¼©å°å›¾ç‰‡åŠ é€Ÿè¿è¡Œ
+img = imresize(img, scale); % ËõĞ¡Í¼Æ¬¼ÓËÙÔËĞĞ
 img = im2double(img);
 
 tic; 
@@ -19,15 +19,15 @@ ra = rangefilt(img, true(3));
 toc;
 fea_mat = cat(3,img,hsv,ycbcr,st,ra);
 
-load modle-tree-res % åŠ è½½æ¨¡å‹
+load modle-tree-res % ¼ÓÔØÄ£ĞÍ
 
-% é¢„æµ‹
+% Ô¤²â
 [m,n,k] = size(img);
 preddata = double(reshape(fea_mat,m*n,[]));
 preddata = mapminmax('apply', preddata', ps);
 preddata = preddata';
 predlab = predict(mdl_tree, preddata);
-% åå¤„ç†
+% ºó´¦Àí
 bw = reshape(predlab, m, n);
 % figure;imshow(bw);
 bw1 = bwareaopen(bw,500);
@@ -36,11 +36,11 @@ bwf = fillsmallholes(bw1, 100);
 % figure;imshow(bwf);
 
 res = bwf .* img;
-ratio = (1 - sum(sum(bwf)) ./ (m .* n)) .* 100; % å€’ä¼å æ¯”
-ratio = round(ratio, 2); % ä¿ç•™2ä½å°æ•°
+ratio = (1 - sum(sum(bwf)) ./ (m .* n)) .* 100; % µ¹·üÕ¼±È
+ratio = round(ratio, 2); % ±£Áô2Î»Ğ¡Êı
 figure;
-subplot(121);imshow(img);title('åŸå›¾')
-subplot(122);imshow(res);title(['ç»“æœå›¾ï¼Œå—ç¾å æ¯”ä¸º', num2str(ratio), '%'])
+subplot(121);imshow(img);title('Ô­Í¼')
+subplot(122);imshow(res);title(['½á¹ûÍ¼£¬ÊÜÔÖÕ¼±ÈÎª', num2str(ratio), '%'])
 imwrite(res,[picName,'-res.jpg']);
 
 

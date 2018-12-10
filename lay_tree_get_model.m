@@ -5,7 +5,7 @@ clc;
 picName = 'res';
 img = imread([picName,'.jpg']);
 scale = 0.25;
-img = imresize(img, scale); % ç¼©å°å›¾ç‰‡åŠ é€Ÿè¿è¡Œ
+img = imresize(img, scale); % ËõĞ¡Í¼Æ¬¼ÓËÙÔËĞĞ
 img = im2double(img);
 
 tic;
@@ -20,7 +20,7 @@ toc;
 
 % eval(['load roi_',picName]);
 load roi_res
-% æ ¹æ®roi1å–ç¬¬ä¸€ç±»æ ·æœ¬
+% ¸ù¾İroi1È¡µÚÒ»ÀàÑù±¾
 fea_mat = cat(3,img,hsv,ycbcr,st,ra);
 
 data1 = [];
@@ -31,7 +31,7 @@ for i=1:size(roi1,1)
     tmp = reshape(tmp,[],size(fea_mat,3));
     data1 = [data1; tmp];
 end
-% æ ¹æ®roi2å–ç¬¬äºŒç±»æ ·æœ¬
+% ¸ù¾İroi2È¡µÚ¶şÀàÑù±¾
 data2 = [];
 roi2 = fix(roi2 * scale);
 for i=1:size(roi2,1)
@@ -42,14 +42,14 @@ for i=1:size(roi2,1)
 end
 
 data = double([data1; data2]);
-[data, ps] = mapminmax(data'); % å½’ä¸€åŒ–
+[data, ps] = mapminmax(data'); % ¹éÒ»»¯
 data = data';
 label = [zeros(size(data1,1),1); ones(size(data2,1),1)];
-% æ‰“ä¹±æ•°æ®
+% ´òÂÒÊı¾İ
 A = [data, label];
-rng(1); % éšæœºseed
+rng(1); % Ëæ»úseed
 B = A(randperm(size(A,1)), :);
-% æ•°æ®åˆ’åˆ†è®­ç»ƒé›†ã€éªŒè¯é›†ã€æµ‹è¯•é›†
+% Êı¾İ»®·ÖÑµÁ·¼¯¡¢ÑéÖ¤¼¯¡¢²âÊÔ¼¯
 [trainsamp, valsamp, testsamp] = dividerand(B',0.7,0.15,0.15);
 [trainsamp, valsamp, testsamp] = deal(trainsamp', valsamp', testsamp');
 s_d = size(B,2);
@@ -57,7 +57,7 @@ s_d = size(B,2);
 [valdata, vallab] = deal(valsamp(:,1:s_d-1), valsamp(:,s_d));
 [testdata, testlab] = deal(testsamp(:,1:s_d-1), testsamp(:,s_d));
 
-% è®­ç»ƒ
+% ÑµÁ·
 % mdl_tree = fitctree(traindata, trainlab,'MaxNumSplits',10,'CrossVal','on');
 % view(mdl_tree.Trained{1},'Mode','graph');
 % lab = kfoldPredict(mdl_tree);
@@ -67,8 +67,8 @@ eval(['save modle-tree-',picName,' mdl_tree ps'])
 
 lab = predict(mdl_tree, valdata);
 acc = 1 - sum(lab ~= vallab) / size(lab,1);
-disp(['éªŒè¯é›†å‡†ç¡®ç‡ï¼š', num2str(acc)]);
-% è‡ªå˜é‡æƒé‡
+disp(['ÑéÖ¤¼¯×¼È·ÂÊ£º', num2str(acc)]);
+% ×Ô±äÁ¿È¨ÖØ
 imp = predictorImportance(mdl_tree);
 
 figure;
@@ -81,13 +81,13 @@ h = gca;
 h.XTickLabel = mdl_tree.PredictorNames;
 h.XTickLabelRotation = 45;
 h.TickLabelInterpreter = 'none';
-% é¢„æµ‹
+% Ô¤²â
 [m,n,k] = size(img);
 preddata = double(reshape(fea_mat,m*n,[]));
 preddata = mapminmax('apply', preddata', ps);
 preddata = preddata';
 predlab = predict(mdl_tree, preddata);
-% åå¤„ç†
+% ºó´¦Àí
 bw = reshape(predlab, m, n);
 % figure;imshow(bw);
 bw1 = bwareaopen(bw,500);
@@ -96,11 +96,11 @@ bwf = fillsmallholes(bw1, 100);
 % figure;imshow(bwf);
 
 res = bwf .* img;
-ratio = (1 - sum(sum(bwf)) ./ (m .* n)) .* 100; % å€’ä¼å æ¯”
-ratio = round(ratio, 2); % ä¿ç•™2ä½å°æ•°
+ratio = (1 - sum(sum(bwf)) ./ (m .* n)) .* 100; % µ¹·üÕ¼±È
+ratio = round(ratio, 2); % ±£Áô2Î»Ğ¡Êı
 figure;
-subplot(121);imshow(img);title('åŸå›¾')
-subplot(122);imshow(res);title(['ç»“æœå›¾ï¼Œå—ç¾å æ¯”ä¸º', num2str(ratio), '%'])
+subplot(121);imshow(img);title('Ô­Í¼')
+subplot(122);imshow(res);title(['½á¹ûÍ¼£¬ÊÜÔÖÕ¼±ÈÎª', num2str(ratio), '%'])
 imwrite(res,[picName,'-res.jpg']);
 
 
